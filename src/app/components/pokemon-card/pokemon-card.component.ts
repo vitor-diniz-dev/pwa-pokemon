@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Pokemon } from '../../models/pokemon.model';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pokemon-card',

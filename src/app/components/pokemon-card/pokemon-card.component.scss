@@ -2,13 +2,24 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  border: 1px solid #ccc;
+  max-width: 120px;
+  padding: 10px;
+  border-radius: 15px;
+  align-items: center;
 
   .pokemon-image {
-    max-width: 200px;
+    width: 100px;
+    height: 100px;
+  }
+  .pokemon-id {
+    font-size: 12px;
+    margin: 2px 0;
   }
   .pokemon-name {
     font-size: 1.5rem;
     font-weight: bold;
     text-transform: capitalize;
+    margin: 5px 0;
   }
 }

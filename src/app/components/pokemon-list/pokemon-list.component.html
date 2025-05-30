@@ -4,6 +4,8 @@
     type="search"
     [(ngModel)]="pokemonSearchName"
     name="pokemonSearchName"
+    id="pokemonSearchName"
+    placeholder="Digite o nome do Pokémon"
   />
   <button type="submit">🔎</button>
 </form>
@@ -11,9 +13,9 @@
   <div *ngIf="!pokemonIds.length" class="pokemon-card-tip">
     <p>Não foi encontrado Pokémon com o nome "{{ pokemonSearched }}"</p>
   </div>
-  <ul *ngIf="pokemonIds.length" class="pokemon-list">
-    <li *ngFor="let pokemonId of pokemonIds" class="pokemon-item">
+  <div *ngIf="pokemonIds.length" class="row row-cols-6">
+    <div *ngFor="let pokemonId of pokemonIds" class="pokemon-col">
       <app-pokemon-card [id]="pokemonId"></app-pokemon-card>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,19 @@
+<form (ngSubmit)="searchPokemon()" class="pokemon-search-form">
+  <label for="pokemonSearchName">Pesquisar por nome</label>
+  <input
+    type="search"
+    [(ngModel)]="pokemonSearchName"
+    name="pokemonSearchName"
+  />
+  <button type="submit">🔎</button>
+</form>
+<div class="pokemon-list-container">
+  <div *ngIf="!pokemonIds.length" class="pokemon-card-tip">
+    <p>Não foi encontrado Pokémon com o nome "{{ pokemonSearched }}"</p>
+  </div>
+  <ul *ngIf="pokemonIds.length" class="pokemon-list">
+    <li *ngFor="let pokemonId of pokemonIds" class="pokemon-item">
+      <app-pokemon-card [id]="pokemonId"></app-pokemon-card>
+    </li>
+  </ul>
+</div>

@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
 export class ApiService {
   constructor(private httpClient: HttpClient) {}
 
-  // Obtem um Pokemon específico pelo ID
-  getPokemon(pokemonId: number): Observable<Pokemon> {
+  // Obtem um Pokemon específico pelo ID ou por seu nome
+  getPokemon(pokemon: number | string): Observable<Pokemon> {
     return this.httpClient.get<Pokemon>(
-      'https://pokeapi.co/api/v2/pokemon/' + pokemonId
+      'https://pokeapi.co/api/v2/pokemon/' + pokemon
     );
   }
 }

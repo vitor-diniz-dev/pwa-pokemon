@@ -1,4 +1,11 @@
 <div class="pokemon-card">
+  <button
+    class="pokemon-favorite"
+    [class.favorited]="favorited"
+    (click)="favoritePokemon()"
+  >
+    ❤
+  </button>
   <ng-container *ngIf="pokemon">
     <img
       [src]="pokemon.sprites.front_default"

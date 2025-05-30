@@ -8,6 +8,19 @@
   border-radius: 15px;
   align-items: center;
 
+  .pokemon-favorite {
+    position: absolute;
+    font-size: 20px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    top: 5px;
+    right: 5px;
+
+    &.favorited {
+      color: red;
+    }
+  }
   .pokemon-image {
     width: 100px;
     height: 100px;

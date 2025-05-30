@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 export class PokemonCardComponent {
   @Input() id: number = 1;
   protected pokemon: Pokemon | null = null;
+  // Se o Pokemon foi marcado como favorito
+  protected favorited: boolean = false;
 
   constructor(private api: ApiService) {}
 
@@ -22,7 +24,11 @@ export class PokemonCardComponent {
   getPokemon() {
     this.api.getPokemon(this.id).subscribe((res) => {
       this.pokemon = res;
-      console.log(this.pokemon);
     });
+  }
+
+  // Marca ou desmarca o Pokemon como favorito
+  protected favoritePokemon() {
+    this.favorited = !this.favorited;
   }
 }

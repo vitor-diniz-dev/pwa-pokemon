@@ -1,0 +1,14 @@
+.pokemon-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .pokemon-image {
+    max-width: 200px;
+  }
+  .pokemon-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+}

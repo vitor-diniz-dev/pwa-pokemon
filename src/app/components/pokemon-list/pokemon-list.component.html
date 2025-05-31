@@ -1,39 +1,48 @@
-<form (ngSubmit)="searchPokemon()" class="pokemon-search-form">
-  <label for="pokemonSearchName">Pesquisar por nome</label>
-  <input
-    type="search"
-    [(ngModel)]="pokemonSearchName"
-    name="pokemonSearchName"
-    id="pokemonSearchName"
-    placeholder="Digite o nome do Pokémon"
-  />
-  <button type="submit">🔎</button>
-</form>
-<div class="pokemon-list-container">
-  <div
-    *ngIf="loadingPokemonList"
-    class="spinner-border text-primary"
-    role="status"
-  >
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  <div *ngIf="!loadingPokemonList && !pokemons.length" class="pokemon-card-tip">
-    <p>Não foi encontrado Pokémon com o nome "{{ pokemonSearched }}"</p>
-  </div>
-  <div *ngIf="pokemons.length" class="row row-cols-6">
-    <div *ngFor="let pokemon of pokemons" class="pokemon-col">
-      <app-pokemon-card [name]="pokemon"></app-pokemon-card>
+<div class="pokemon-search-list-container">
+  <form (ngSubmit)="searchPokemon()" class="pokemon-search-form">
+    <label for="pokemonSearchName" class="form-label">Pesquisar por nome</label>
+    <div class="input-group">
+      <input
+        class="form-control"
+        type="search"
+        [(ngModel)]="pokemonSearchName"
+        name="pokemonSearchName"
+        id="pokemonSearchName"
+        placeholder="Digite o nome do Pokémon"
+      />
+      <button class="btn btn-outline-secondary" type="submit">🔎</button>
+    </div>
+  </form>
+  <div class="pokemon-list-container">
+    <div
+      *ngIf="loadingPokemonList"
+      class="spinner-border text-primary"
+      role="status"
+    >
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div
+      *ngIf="!loadingPokemonList && !pokemons.length"
+      class="pokemon-card-tip"
+    >
+      <p>Não foi encontrado Pokémon com o nome "{{ pokemonSearched }}"</p>
+    </div>
+    <div *ngIf="pokemons.length" class="row row-cols-6">
+      <div *ngFor="let pokemon of pokemons" class="pokemon-col">
+        <app-pokemon-card [name]="pokemon"></app-pokemon-card>
+      </div>
     </div>
   </div>
+  <ngb-pagination
+    *ngIf="pokemons.length > 1"
+    class="pagination"
+    [(page)]="pagination.page"
+    [pageSize]="pagination.pageSize"
+    [maxSize]="5"
+    [collectionSize]="pagination.collectionSize"
+    (pageChange)="getPokemons()"
+  >
+    <ng-template ngbPaginationEllipsis>...</ng-template>
+    <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+  </ngb-pagination>
 </div>
-<ngb-pagination
-  *ngIf="pokemons.length > 1"
-  [(page)]="pagination.page"
-  [pageSize]="pagination.pageSize"
-  [maxSize]="5"
-  [collectionSize]="pagination.collectionSize"
-  (pageChange)="getPokemons()"
->
-  <ng-template ngbPaginationEllipsis>...</ng-template>
-  <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
-</ngb-pagination>

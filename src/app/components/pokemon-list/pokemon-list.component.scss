@@ -1,5 +1,12 @@
-.pokemon-col {
+.pokemon-list-container {
   display: flex;
   justify-content: center;
-  padding: 5px;
+  align-items: center;
+  min-height: 800px;
+
+  .pokemon-col {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+  }
 }

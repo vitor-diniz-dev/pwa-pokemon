@@ -22,11 +22,15 @@ export class PokemonListComponent {
   protected pokemonSearched: string = '';
   protected pokemons: string[] = [];
 
+  // Objeto de paginação para controlar a paginação da lista de Pokemons
   protected pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 24,
     collectionSize: 0,
   };
+
+  // Variável para controlar o estado de carregamento da lista de Pokemons, gerando o efeito de loading
+  protected loadingPokemonList: boolean = false;
 
   constructor(private api: ApiService) {}
 
@@ -38,6 +42,7 @@ export class PokemonListComponent {
   protected getPokemons() {
     const offset = (this.pagination.page - 1) * this.pagination.pageSize;
 
+    this.loadingPokemonList = true;
     this.api.getPokemons(offset, this.pagination.pageSize).subscribe({
       next: (res) => {
         this.pagination.collectionSize = res.count;
@@ -45,6 +50,9 @@ export class PokemonListComponent {
         for (let pokemon of res.results) {
           this.pokemons.push(pokemon.name);
         }
+      },
+      complete: () => {
+        this.loadingPokemonList = false;
       },
     });
   }

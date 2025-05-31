@@ -7,6 +7,12 @@
   border-radius: 15px;
   align-items: center;
   width: 200px;
+  cursor: pointer;
+
+  &.favorited {
+    border-color: red;
+    border-width: 2px;
+  }
 
   .pokemon-favorite {
     position: absolute;
@@ -16,10 +22,6 @@
     border: none;
     top: 5px;
     right: 5px;
-
-    &.favorited {
-      color: red;
-    }
   }
   .pokemon-image {
     width: 100px;

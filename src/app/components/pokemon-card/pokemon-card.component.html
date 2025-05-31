@@ -1,10 +1,10 @@
-<div class="pokemon-card">
-  <button
-    class="pokemon-favorite"
-    [class.favorited]="favorited"
-    (click)="favoritePokemon()"
-  >
-    ❤
+<div
+  class="pokemon-card"
+  [class.favorited]="favorited"
+  (click)="favoritePokemon()"
+>
+  <button class="pokemon-favorite" (click)="favoritePokemon()">
+    {{ favorited ? "❤️" : "🤍" }}
   </button>
   <ng-container *ngIf="pokemon">
     <img

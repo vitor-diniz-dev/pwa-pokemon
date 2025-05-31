@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './pokemon-card.component.scss',
 })
 export class PokemonCardComponent {
-  @Input() id: number = 1;
+  @Input() name?: string;
   protected pokemon: Pokemon | null = null;
   // Se o Pokemon foi marcado como favorito
   protected favorited: boolean = false;
@@ -22,9 +22,11 @@ export class PokemonCardComponent {
   }
 
   getPokemon() {
-    this.api.getPokemon(this.id).subscribe((res) => {
-      this.pokemon = res;
-    });
+    if (this.name) {
+      this.api.getPokemon(this.name).subscribe((res) => {
+        this.pokemon = res;
+      });
+    }
   }
 
   // Marca ou desmarca o Pokemon como favorito

@@ -10,12 +10,23 @@
   <button type="submit">🔎</button>
 </form>
 <div class="pokemon-list-container">
-  <div *ngIf="!pokemonIds.length" class="pokemon-card-tip">
+  <div *ngIf="!pokemons.length" class="pokemon-card-tip">
     <p>Não foi encontrado Pokémon com o nome "{{ pokemonSearched }}"</p>
   </div>
-  <div *ngIf="pokemonIds.length" class="row row-cols-6">
-    <div *ngFor="let pokemonId of pokemonIds" class="pokemon-col">
-      <app-pokemon-card [id]="pokemonId"></app-pokemon-card>
+  <div *ngIf="pokemons.length" class="row row-cols-6">
+    <div *ngFor="let pokemon of pokemons" class="pokemon-col">
+      <app-pokemon-card [name]="pokemon"></app-pokemon-card>
     </div>
   </div>
 </div>
+<ngb-pagination
+  *ngIf="pokemons.length > 1"
+  [(page)]="pagination.page"
+  [pageSize]="pagination.pageSize"
+  [maxSize]="5"
+  [collectionSize]="pagination.collectionSize"
+  (pageChange)="getPokemons()"
+>
+  <ng-template ngbPaginationEllipsis>...</ng-template>
+  <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+</ngb-pagination>

@@ -32,6 +32,9 @@ export class PokemonListComponent {
   // Variável para controlar o estado de carregamento da lista de Pokemons, gerando o efeito de loading
   protected loadingPokemonList: boolean = false;
 
+  // Dica apresentada
+  protected dica: string = '';
+
   constructor(private api: ApiService) {}
 
   ngOnInit() {
@@ -43,13 +46,20 @@ export class PokemonListComponent {
     const offset = (this.pagination.page - 1) * this.pagination.pageSize;
 
     this.loadingPokemonList = true;
+    this.pokemons = []; // Limpa a lista de Pokemons antes de adicionar novos
     this.api.getPokemons(offset, this.pagination.pageSize).subscribe({
       next: (res) => {
         this.pagination.collectionSize = res.count;
-        this.pokemons = []; // Limpa a lista de Pokemons antes de adicionar novos
         for (let pokemon of res.results) {
           this.pokemons.push(pokemon.name);
         }
+      },
+      error: () => {
+        this.loadingPokemonList = false;
+        this.pokemons = [];
+        this.pagination.collectionSize = 0;
+        this.dica =
+          'Não foi possível carregar a lista de Pokémons. Tente novamente mais tarde.';
       },
       complete: () => {
         this.loadingPokemonList = false;
@@ -59,13 +69,20 @@ export class PokemonListComponent {
 
   // Pesquisa o Pokemon pelo nome inserido no input
   protected searchPokemon() {
+    this.loadingPokemonList = true;
     this.pokemonSearched = this.pokemonSearchName;
+    this.pokemons = [];
+
     this.api.getPokemon(this.pokemonSearchName).subscribe({
       next: (res) => {
         this.pokemons = [res.name];
       },
       error: () => {
-        this.pokemons = [];
+        this.loadingPokemonList = false;
+        this.dica = `Não foi encontrado Pokémon com o nome "${this.pokemonSearched}"`;
+      },
+      complete: () => {
+        this.loadingPokemonList = false;
       },
     });
   }

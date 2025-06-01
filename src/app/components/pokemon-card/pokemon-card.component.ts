@@ -15,6 +15,8 @@ export class PokemonCardComponent {
   // Se o Pokemon foi marcado como favorito
   protected favorited: boolean = false;
 
+  protected loading: boolean = false;
+
   constructor(private api: ApiService) {}
 
   ngOnInit() {
@@ -23,8 +25,17 @@ export class PokemonCardComponent {
 
   getPokemon() {
     if (this.name) {
-      this.api.getPokemon(this.name).subscribe((res) => {
-        this.pokemon = res;
+      this.loading = true;
+      this.api.getPokemon(this.name).subscribe({
+        next: (res) => {
+          this.pokemon = res;
+        },
+        error: () => {
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
       });
     }
   }

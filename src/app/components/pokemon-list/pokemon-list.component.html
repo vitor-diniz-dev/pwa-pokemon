@@ -25,7 +25,7 @@
       *ngIf="!loadingPokemonList && !pokemons.length"
       class="pokemon-card-tip"
     >
-      <p>Não foi encontrado Pokémon com o nome "{{ pokemonSearched }}"</p>
+      <p>{{ dica }}</p>
     </div>
     <div *ngIf="pokemons.length" class="row row-cols-6">
       <div *ngFor="let pokemon of pokemons" class="pokemon-col">

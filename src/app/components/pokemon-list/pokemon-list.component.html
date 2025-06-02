@@ -2,36 +2,38 @@
   <app-pokemon-search
     (pokemonSearched)="searchPokemon($event)"
   ></app-pokemon-search>
-  <div class="pokemon-list-container">
-    <div
-      *ngIf="loadingPokemonList"
-      class="spinner-border text-primary"
-      role="status"
-    >
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    <div
-      *ngIf="!loadingPokemonList && !pokemons.length"
-      class="pokemon-card-tip"
-    >
-      <p>{{ dica }}</p>
-    </div>
-    <div *ngIf="pokemons.length" class="row row-cols-6">
-      <div *ngFor="let pokemon of pokemons" class="pokemon-col">
-        <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
+  <div class="pokedex-display">
+    <div class="pokemon-list-container">
+      <div
+        *ngIf="loadingPokemonList"
+        class="spinner-border text-primary"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div
+        *ngIf="!loadingPokemonList && !pokemons.length"
+        class="pokemon-card-tip"
+      >
+        <p>{{ dica }}</p>
+      </div>
+      <div *ngIf="pokemons.length" class="row row-cols-6">
+        <div *ngFor="let pokemon of pokemons" class="pokemon-col">
+          <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
+        </div>
       </div>
     </div>
+    <ngb-pagination
+      *ngIf="pokemons.length > 1"
+      class="pagination"
+      [(page)]="pagination.page"
+      [pageSize]="pagination.pageSize"
+      [maxSize]="5"
+      [collectionSize]="pagination.collectionSize"
+      (pageChange)="getPokemons()"
+    >
+      <ng-template ngbPaginationEllipsis>...</ng-template>
+      <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+    </ngb-pagination>
   </div>
-  <ngb-pagination
-    *ngIf="pokemons.length > 1"
-    class="pagination"
-    [(page)]="pagination.page"
-    [pageSize]="pagination.pageSize"
-    [maxSize]="5"
-    [collectionSize]="pagination.collectionSize"
-    (pageChange)="getPokemons()"
-  >
-    <ng-template ngbPaginationEllipsis>...</ng-template>
-    <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
-  </ngb-pagination>
 </div>

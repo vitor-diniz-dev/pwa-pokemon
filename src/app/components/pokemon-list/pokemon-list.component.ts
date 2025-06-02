@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { PokemonSearchComponent } from '../pokemon-search/pokemon-search.compone
   ],
   templateUrl: './pokemon-list.component.html',
   styleUrl: './pokemon-list.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class PokemonListComponent {
   // Nome do Pokemon a ser pesquisado

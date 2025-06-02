@@ -4,7 +4,7 @@ Descrever como a IA foi utilizada para auxiliar no desenvolvimento do sistema.
 
 # Abordagem
 
-Nem sempre a IA terá a melhor solução para o problema, portanto para destacar o que foi descartado e alterado foram usadas marcações especiais. Texto tachado para as sugestões descartadas e texto em itálico para descrever a solução alternativa adotada.
+Nem sempre a IA terá a melhor solução para o problema, portanto para destacar o que foi descartado e alterado foram usadas marcações especiais. Texto tachado para as sugestões descartadas e texto de referência para descrever a solução alternativa adotada ou algumas observações sobre a solução.
 
 \*IA utilizada: ChatGPT
 
@@ -81,13 +81,14 @@ Compreender como criar um app PWA utilizando Angular.
    `ng add @angular/pwa`
 
 💡 O que esse comando faz:
--Ele modifica automaticamente seu projeto:
--Adiciona o arquivo manifest.webmanifest
--Cria o ngsw-config.json (para o Service Worker)
--Registra o Service Worker no main.ts
--Adiciona ícones padrão
--Atualiza angular.json para incluir os assets do PWA
--Ajusta o index.html com meta tags e links de ícones
+
+- Ele modifica automaticamente seu projeto:
+- Adiciona o arquivo manifest.webmanifest
+- Cria o ngsw-config.json (para o Service Worker)
+- Registra o Service Worker no main.ts
+- Adiciona ícones padrão
+- Atualiza angular.json para incluir os assets do PWA
+- Ajusta o index.html com meta tags e links de ícones
 
 ✅ Depois disso...
 
@@ -99,10 +100,10 @@ Compreender como criar um app PWA utilizando Angular.
 
 ~~Ou instale globalmente:~~
 ~~`npm install -g http-server`~~
-~~`http-server dist/seu-app`~~
+~~`http-server dist/seu-app`~~  
 ⚠️ O PWA só funciona corretamente em produção ou com um servidor HTTPS.
 
-_O comando que funcionou foi `npx http-server -p 8080 -c-1 dist/pwa-pokemon/browser` justamente por conta da criação da pasta browser pelo comando `ng build`, conforme recomendado pela documentação do [Angular](https://angular.dev/ecosystem/service-workers/getting-started#service-worker-in-action-a-tour)_
+> O comando que funcionou foi `npx http-server -p 8080 -c-1 dist/pwa-pokemon/browser` justamente por conta da criação da pasta browser pelo comando `ng build`, conforme recomendado pela documentação do [Angular](https://angular.dev/ecosystem/service-workers/getting-started#service-worker-in-action-a-tour)
 
 🧪 Testar como PWA no navegador
 
@@ -112,9 +113,10 @@ _O comando que funcionou foi `npx http-server -p 8080 -c-1 dist/pwa-pokemon/brow
 4. Clique em “Install” ou use o botão que aparece na barra de endereço.
 
 🔁 Próximos passos (opcional)
--Personalizar os ícones e nome no arquivo manifest.webmanifest.
--Configurar notificações push (usando o Firebase, por exemplo).
--Ajustar o ngsw-config.json para definir regras de cache específicas.
+
+- Personalizar os ícones e nome no arquivo manifest.webmanifest.
+- Configurar notificações push (usando o Firebase, por exemplo).
+- Ajustar o ngsw-config.json para definir regras de cache específicas.
 
 ## Adicionar delay a uma request usando o rxjs
 
@@ -126,11 +128,10 @@ Testar a mudança de estado de certos componentes entre status de carregando e c
 
 Para adicionar delay a uma requisição HTTP no Angular, você pode usar operadores do RxJS como delay, delayWhen, ou até timer. Isso é útil para simular latência ou criar efeitos visuais com loaders, por exemplo.
 
-✅ Exemplo com delay
+✅ Exemplo com delay  
 🔹 Serviço Angular (HttpClient + delay)
 
 ```
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay } from 'rxjs/operators';
@@ -149,7 +150,6 @@ export class PokemonService {
 🧪 Como usar no componente
 
 ```
-
 this.pokemonService.getPokemon('pikachu').subscribe(data => {
   console.log('Pokémon recebido após 1 segundo:', data);
 });
@@ -164,3 +164,107 @@ this.pokemonService.getPokemon('pikachu').subscribe(data => {
 
 ~~getPokemon(name: string) {
 ~~ return this.http.get(`https://pokeapi.co/api/v2/pokemon/${name}`).pipe(delayWhen(() => timer(2000)));~~
+
+## Como aplicar funcionamento offline com cache das chamadas REST em um PWA com Angular?
+
+### Motivo
+
+Aplicar o cache das chamadas REST com o uso do PWA.
+
+### Resposta
+
+Para aplicar funcionamento offline com cache de chamadas REST em um PWA com Angular, o caminho mais direto e suportado oficialmente é usar:
+
+@angular/service-worker, que integra o Service Worker ao seu app Angular, com configuração automática de cache via ngsw-config.json.
+
+✅ ~~1. Adicionar suporte a PWA~~
+Se ainda não fez isso:
+
+`ng add @angular/pwa`
+Esse comando:
+
+- Instala o @angular/service-worker
+- Adiciona o ngsw-config.json
+- Registra automaticamente o service worker no main.ts em produção
+
+✅ ~~2. Habilitar o ServiceWorkerModule (já adicionado com ng add)~~
+No seu app.module.ts:
+
+```
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
+@NgModule({
+  imports: [
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+> Etapas 1 e 2 já haviam sido realizadas ao instalar o PWA ao projeto Angular.
+
+✅ 3. Configurar o cache das chamadas REST
+No arquivo ngsw-config.json (na raiz do projeto), adicione uma entrada em "dataGroups":
+
+```
+{
+  "dataGroups": [
+    {
+      "name": "poke-api-cache",
+      "urls": [
+        "https://pokeapi.co/api/v2/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance", // ou "freshness"
+        "maxSize": 50,
+        "maxAge": "1d",
+        "timeout": "10s"
+      }
+    }
+  ]
+}
+```
+
+Explicação:
+
+- "urls": define quais requisições serão interceptadas e cacheadas.
+- "strategy":
+  - "performance": serve do cache primeiro, depois tenta rede (modo offline-friendly).
+  - "freshness": rede primeiro, mas usa cache se rede falhar.
+- "maxAge": tempo que os dados são válidos (ex: "1d" = 1 dia).
+- "maxSize": número de entradas no cache.
+- "timeout": usado no modo "freshness".
+
+✅ 4. Build de produção com Service Worker ativado
+`ng build --configuration production`  
+Ou com `ng deploy`, se usar alguma ferramenta como `angular-cli-ghpages`.
+
+✅ 5. Testar modo offline localmente
+Instale o servidor HTTP que simula produção:
+
+```
+npm install -g http-server
+http-server ./dist/<nome-do-projeto>
+```
+
+Acesse http://localhost:8080, navegue uma vez, e depois desligue a internet.
+
+- Você verá que as páginas e dados REST configurados continuarão carregando (se estiverem em cache).
+
+✅ ~~Extras (opcional):~~  
+Você pode verificar se o Service Worker está ativo via:
+
+```
+constructor(private swUpdate: SwUpdate) {
+  if (swUpdate.isEnabled) {
+    swUpdate.available.subscribe(() => {
+      if (confirm("Nova versão disponível. Atualizar?")) {
+        window.location.reload();
+      }
+    });
+  }
+}
+```

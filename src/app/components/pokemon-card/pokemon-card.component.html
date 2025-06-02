@@ -1,20 +1,22 @@
+<!-- O atributo id serve para identificar que os dados do Pokémon foram corretamente carregados pelo card -->
 <div
   class="pokemon-card"
-  [class.favorited]="favorited"
+  [class.favorited]="favorited && pokemon?.id"
   (click)="favoritePokemon()"
 >
-  <div *ngIf="!pokemon && loading" class="placeholder-glow">
+  <div *ngIf="loading" class="placeholder-glow">
     <div class="placeholder col-12"></div>
   </div>
-  <p *ngIf="!pokemon && !loading" class="pokemon-card-tip">
+  <p *ngIf="!pokemon?.id && !loading" class="pokemon-card-tip">
     Falha em coletar dados do Pokémon. <br />Tente novamente mais tarde.
   </p>
-  <ng-container *ngIf="pokemon">
+  <ng-container *ngIf="pokemon && pokemon.id && !loading">
     <button class="pokemon-favorite" (click)="favoritePokemon($event)">
       {{ favorited ? "❤️" : "🤍" }}
     </button>
 
     <img
+      *ngIf="pokemon.sprites"
       [src]="pokemon.sprites.front_default"
       [alt]="pokemon.name"
       class="pokemon-image"

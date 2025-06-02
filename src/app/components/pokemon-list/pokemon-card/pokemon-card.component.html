@@ -16,11 +16,13 @@
     </button>
 
     <img
-      *ngIf="pokemon.sprites"
-      [src]="pokemon.sprites.front_default"
+      [src]="pokemon.sprites?.front_default || '/images/missingno.webp'"
       [alt]="pokemon.name"
       class="pokemon-image"
     />
+    <span *ngIf="!pokemon.sprites?.front_default" class="image-not-found"
+      >Imagem não encontrada</span
+    >
     <p class="pokemon-id">#{{ pokemon.id }}</p>
     <p class="pokemon-name">{{ pokemon.name }}</p>
   </ng-container>

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { Pokemon } from '../../models/pokemon.model';
+import { PokemonCardComponent } from './pokemon-card/pokemon-card.component';
+import { PokemonSearchComponent } from '../pokemon-search/pokemon-search.component';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -13,13 +14,13 @@ import { Pokemon } from '../../models/pokemon.model';
     CommonModule,
     FormsModule,
     NgbPaginationModule,
+    PokemonSearchComponent,
   ],
   templateUrl: './pokemon-list.component.html',
   styleUrl: './pokemon-list.component.scss',
 })
 export class PokemonListComponent {
   // Nome do Pokemon a ser pesquisado
-  protected pokemonSearchName: string = '';
   protected pokemonSearched: string = '';
   protected pokemons: Pokemon[] = [];
 
@@ -69,7 +70,7 @@ export class PokemonListComponent {
   }
 
   protected getPokemon() {
-    this.api.getPokemon(this.pokemonSearchName).subscribe({
+    this.api.getPokemon(this.pokemonSearched).subscribe({
       next: (res) => {
         this.pokemons = [res];
       },
@@ -84,12 +85,12 @@ export class PokemonListComponent {
   }
 
   // Pesquisa o Pokemon pelo nome inserido no input
-  protected searchPokemon() {
+  protected searchPokemon(pokemonName: string) {
     this.loadingPokemonList = true;
-    this.pokemonSearched = this.pokemonSearchName;
+    this.pokemonSearched = pokemonName;
     this.pokemons = [];
 
     // Se campo de pesquisa estiver vazio, busca todos os Pokemons
-    this.pokemonSearchName ? this.getPokemon() : this.getPokemons();
+    this.pokemonSearched ? this.getPokemon() : this.getPokemons();
   }
 }

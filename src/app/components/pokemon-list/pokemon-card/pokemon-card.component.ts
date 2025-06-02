@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Pokemon } from '../../models/pokemon.model';
-import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { PokemonService } from '../../services/pokemon.service';
+import { Pokemon } from '../../../models/pokemon.model';
+import { ApiService } from '../../../services/api.service';
+import { PokemonService } from '../../../services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-card',

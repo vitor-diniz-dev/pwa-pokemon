@@ -1,18 +1,7 @@
 <div class="pokemon-search-list-container">
-  <form (ngSubmit)="searchPokemon()" class="pokemon-search-form">
-    <label for="pokemonSearchName" class="form-label">Pesquisar por nome</label>
-    <div class="input-group">
-      <input
-        class="form-control"
-        type="search"
-        [(ngModel)]="pokemonSearchName"
-        name="pokemonSearchName"
-        id="pokemonSearchName"
-        placeholder="Digite o nome do Pokémon"
-      />
-      <button class="btn btn-outline-secondary" type="submit">🔎</button>
-    </div>
-  </form>
+  <app-pokemon-search
+    (pokemonSearched)="searchPokemon($event)"
+  ></app-pokemon-search>
   <div class="pokemon-list-container">
     <div
       *ngIf="loadingPokemonList"

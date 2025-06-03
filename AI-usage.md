@@ -268,3 +268,47 @@ constructor(private swUpdate: SwUpdate) {
   }
 }
 ```
+
+## Qual o código javascript para reconhecer se o browser está online?
+
+### Motivo
+
+Escutar o evento de reconexão para chamar as requisições que falharam por motivo de desconexão.
+
+### Resposta
+
+Você pode usar a propriedade `navigator.onLine` para verificar se o navegador está online, além de escutar eventos de mudança de status de rede (`online` e `offline`). Aqui está um exemplo simples em JavaScript:
+
+```javascript
+// Verifica o status atual da conexão
+if (navigator.onLine) {
+  console.log("O navegador está online.");
+} else {
+  console.log("O navegador está offline.");
+}
+
+// Escuta mudanças no status de conexão
+window.addEventListener("online", () => {
+  console.log("Conexão restabelecida: navegador está online.");
+});
+
+window.addEventListener("offline", () => {
+  console.log("Conexão perdida: navegador está offline.");
+});
+```
+
+- `navigator.onLine` pode não ser 100% confiável, especialmente em redes com _captive portals_ (ex: Wi-Fi público).
+- ~~Para uma verificação mais precisa, você pode tentar fazer uma requisição _fetch_ a um servidor confiável e verificar se ela foi bem-sucedida:~~
+
+```javascript
+async function checkInternetConnection() {
+  try {
+    const response = await fetch("https://www.google.com/favicon.ico", { method: "HEAD", mode: "no-cors" });
+    console.log("Conexão ativa com a internet.");
+  } catch (err) {
+    console.log("Sem conexão com a internet.");
+  }
+}
+```
+
+Essa abordagem é útil em PWAs que precisam tratar o status de rede de forma mais robusta. Se quiser ajuda para integrar isso num app Angular ou PWA, posso te ajudar com isso também.

@@ -57,12 +57,22 @@ export class PokemonListComponent {
           this.pokemons.push({ name: pokemon.name });
         }
       },
-      error: () => {
+      error: (error) => {
         this.loadingPokemonList = false;
         this.pokemons = [];
         this.pagination.collectionSize = 0;
         this.dica =
           'Não foi possível carregar a lista de Pokémons. Tente novamente mais tarde.';
+
+        // Se o erro for de conexão, adiciona a requisição pendente para ser executada quando voltar online
+        if (error.status === 0 && !navigator.onLine) {
+          this.dica =
+            'Você está offline. Verifique sua conexão com a internet.';
+
+          this.api.addPendingRequest(() => {
+            this.getPokemons();
+          });
+        }
       },
       complete: () => {
         this.loadingPokemonList = false;

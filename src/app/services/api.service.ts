@@ -1,13 +1,30 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pokemon } from '../models/pokemon.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private httpClient: HttpClient) {}
+  // Requisição pendente para ser reenviada quando o usuário voltar a estar online
+  private pendingRequest: (() => void) | null = null;
+
+  constructor(private httpClient: HttpClient) {
+    this.listenToOnlineEvent();
+  }
+
+  // Escuta o evento de reconexão com a internet para reenviar requisições pendentes
+  listenToOnlineEvent() {
+    window.addEventListener('online', () => {
+      console.log('Você está online novamente!');
+      if (this.pendingRequest) {
+        console.log('Reenviando requisição pendente...');
+        this.pendingRequest();
+        this.pendingRequest = null;
+      }
+    });
+  }
 
   // Obtem uma lista de Pokemons com paginação
   getPokemons(
@@ -24,5 +41,10 @@ export class ApiService {
     return this.httpClient.get<Pokemon>(
       'https://pokeapi.co/api/v2/pokemon/' + pokemon
     );
+  }
+
+  // Adiciona uma requisição como pendente para ser executada quando o usuário voltar a estar online
+  addPendingRequest(request: () => void): void {
+    this.pendingRequest = request;
   }
 }
